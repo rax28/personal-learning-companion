@@ -931,9 +931,37 @@ function AuthenticatedApp() {
             </p>
             <div className="actions">
               <button
-                onClick={() =>
-                  (window.location.href = `${API}/integrations/google/classroom/start`)
-                }
+                onClick={async () => {
+                  try {
+                    const response = await fetch(
+                      `${API}/integrations/google/classroom/start`,
+                      { credentials: "include" },
+                    );
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                      throw new Error(
+                        data.error ||
+                          "Could not start Google Classroom connection",
+                      );
+                    }
+
+                    if (!data.url) {
+                      throw new Error(
+                        "Google authorization URL was not returned",
+                      );
+                    }
+
+                    window.location.href = data.url;
+                  } catch (error) {
+                    alert(
+                      error instanceof Error
+                        ? error.message
+                        : "Google Classroom connection failed",
+                    );
+                  }
+                }}
                 disabled={!classroom.configured}
               >
                 Connect Google Classroom
