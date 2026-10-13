@@ -9,11 +9,14 @@ from psycopg_pool import ConnectionPool
 _user_id: ContextVar[str|None] = ContextVar("plc_user_id", default=None)
 
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://plc:plc@localhost:5432/plc")
-pool = ConnectionPool(DATABASE_URL, kwargs={"row_factory": dict_row}, open=False)
+pool = ConnectionPool(
+    DATABASE_URL,
+    kwargs={"row_factory": dict_row},
+    open=True,
+)
 
 def open_pool():
-    if pool.closed:
-        pool.open(wait=True)
+    pass
 
 def set_user(user_id: str):
     if not user_id:
