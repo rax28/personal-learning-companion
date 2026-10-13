@@ -1,0 +1,77 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-plc}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-plc}
+      POSTGRES_DB: ${POSTGRES_DB:-plc}
+    ports: ["5432:5432"]
+    volumes: ["plc_pgdata:/var/lib/postgresql/data", "./database/schemas:/docker-entrypoint-initdb.d:ro"]
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U ${POSTGRES_USER:-plc} -d ${POSTGRES_DB:-plc}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  
+
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+    healthcheck:
+      test: ["CMD","redis-cli","ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  ai-backend:
+    build:
+      context: .
+      dockerfile: ai-backend/Dockerfile
+    environment:
+      DATABASE_URL: postgresql://plc_app:${PLC_APP_PASSWORD}@postgres:5432/${POSTGRES_DB:-plc}
+      REDIS_URL: redis://redis:6379/0
+      AI_INTERNAL_TOKEN: ${AI_INTERNAL_TOKEN:-change-me}
+      ONLINE_PROVIDER: ${ONLINE_PROVIDER:-ollama}
+      LOCAL_MODEL: ${LOCAL_MODEL:-llama3.2}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.5-flash}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-5}
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    ports: ["8000:8000"]
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-plc}:${POSTGRES_PASSWORD:-plc}@postgres:5432/${POSTGRES_DB:-plc}
+      REDIS_URL: redis://redis:6379/0
+      AI_BACKEND_URL: http://ai-backend:8000
+      AI_INTERNAL_TOKEN: ${AI_INTERNAL_TOKEN:-change-me}
+      JWT_SECRET: ${JWT_SECRET:-plc-local-development-secret-change-before-deployment-2026-very-long}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      GOOGLE_CLASSROOM_REDIRECT_URI: ${GOOGLE_CLASSROOM_REDIRECT_URI:-http://localhost:4000/oauth/google/classroom/callback}
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+      ai-backend: {condition: service_started}
+    ports: ["4000:4000"]
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:4000}
+    depends_on:
+      backend: {condition: service_started}
+    ports: ["5173:80"]
+
+volumes:
+  plc_pgdata:

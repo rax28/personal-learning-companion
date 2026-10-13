@@ -1,0 +1,61 @@
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Dependencies
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Local databases and generated files
+*.sqlite
+*.sqlite3
+*.db
+redis-data/
+postgres-data/
+
+# Build outputs
+dist/
+build/
+.next/
+coverage/
+
+# OS and editor files
+.DS_Store
+.vscode/
+.idea/
+
+# Local model weights
+local-models/
+
+# Database backups and dumps
+plc_backup.sql
+*.dump
+*.backup
+
+# Local dependency directories
+node_modules/
+**/node_modules/
+.venv/
+**/.venv/
+venv/
+**/venv/
+
+# Runtime data
+__pycache__/
+*.py[cod]
+.DS_Store
+
+# Python virtual environments and test caches
+**/.venv/
+**/venv/
+**/__pycache__/
+**/.pytest_cache/
+*.py[cod]
+**/*.tsbuildinfo

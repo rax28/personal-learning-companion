@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS evidence (id UUID PRIMARY KEY, user_id UUID, concept TEXT, signal TEXT, strength REAL, confidence REAL, description TEXT, source TEXT, observed_at TIMESTAMPTZ DEFAULT now());

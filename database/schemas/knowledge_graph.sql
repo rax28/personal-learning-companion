@@ -1,0 +1,2 @@
+-- SQLite schema used by ai-backend/app/knowledge/persistent_graph.py
+-- Conversation messages remain outside the graph; learning evidence attaches to concepts.

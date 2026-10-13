@@ -1,0 +1,92 @@
+PROGRAMMING IN JAVA
+
+Java is an object-oriented programming language designed to support the development of portable and robust software. A Java program is compiled into bytecode, which can be executed by the Java Virtual Machine. This provides platform independence because the same bytecode can run on different operating systems when a suitable JVM is available.
+
+A basic Java program contains a class and a main method. The main method is the starting point of a standalone Java application.
+
+Example:
+
+public class Hello {
+    public static void main(String[] args) {
+        System.out.println("Hello, Java");
+    }
+}
+
+Java programs use variables to store data. Common primitive data types include byte, short, int, long, float, double, char, and boolean. Variables must be declared with a type before they are used.
+
+Example:
+
+int age = 20;
+double price = 125.50;
+boolean active = true;
+char grade = 'A';
+
+Java provides arithmetic, relational, logical, and assignment operators. Conditional statements allow a program to make decisions. The if, if-else, and switch statements are commonly used for selection.
+
+Example:
+
+int marks = 75;
+
+if (marks >= 50) {
+    System.out.println("Pass");
+} else {
+    System.out.println("Fail");
+}
+
+Loops are used when a group of statements must be executed repeatedly. Java provides for, while, and do-while loops. A for loop is useful when the number of iterations is known.
+
+Example:
+
+for (int i = 0; i < 5; i++) {
+    System.out.println(i);
+}
+
+Object-oriented programming organizes software around classes and objects. A class defines the properties and behavior of objects. An object is an instance of a class.
+
+Example:
+
+class Student {
+    String name;
+    int marks;
+
+    void display() {
+        System.out.println(name);
+        System.out.println(marks);
+    }
+}
+
+Encapsulation combines data and methods inside a class and controls access to the internal state of an object. Access modifiers such as private, protected, and public help implement information hiding.
+
+Inheritance allows one class to acquire properties and methods from another class. The existing class is commonly called the superclass, while the new class is called the subclass.
+
+Example:
+
+class Animal {
+    void sound() {
+        System.out.println("Animal sound");
+    }
+}
+
+class Dog extends Animal {
+    void bark() {
+        System.out.println("Dog barks");
+    }
+}
+
+Exception handling provides a mechanism for dealing with abnormal conditions during program execution. Java uses try, catch, finally, throw, and throws for exception handling.
+
+Example:
+
+try {
+    int result = 10 / 0;
+} catch (ArithmeticException e) {
+    System.out.println("Division by zero");
+}
+
+An interface defines a contract that implementing classes can follow. Interfaces are useful for abstraction and for defining common behavior across unrelated classes.
+
+Packages organize related classes and interfaces. They help avoid naming conflicts and provide access control.
+
+Multithreading allows multiple threads of execution to operate within a program. Threads can be used when independent activities need to execute concurrently.
+
+The Java programming model combines classes, objects, inheritance, encapsulation, interfaces, exception handling, packages, and threads to support the development of large and maintainable software systems.

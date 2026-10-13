@@ -1,0 +1,2 @@
+import {describe,it,expect} from 'vitest'; import app from '../src/app.js'; import {createServer} from 'node:http'; import {once} from 'node:events';
+describe('backend',()=>{it('creates a goal',async()=>{const s=createServer(app);s.listen(0);await once(s,'listening');const a=s.address() as any;const r=await fetch(`http://127.0.0.1:${a.port}/goals`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({title:'Learn recursion',mode:'education'})});expect(r.status).toBe(201);expect((await r.json()).title).toBe('Learn recursion');s.close()})});

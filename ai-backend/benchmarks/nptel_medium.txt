@@ -1,0 +1,753 @@
+PROGRAMMING IN JAVA
+
+Java is a general-purpose, object-oriented programming language designed to support portable and robust software development. Java source code is compiled into bytecode, and the Java Virtual Machine executes that bytecode. This architecture allows Java programs to run on different platforms that provide a compatible JVM.
+
+A basic Java program consists of a class and a main method.
+
+public class Hello {
+    public static void main(String[] args) {
+        System.out.println("Hello Java");
+    }
+}
+
+The main method is the entry point of a standalone Java application. The System.out.println method displays information on the standard output.
+
+JAVA DATA TYPES AND VARIABLES
+
+Java provides primitive data types such as byte, short, int, long, float, double, char, and boolean.
+
+Examples:
+
+int age = 20;
+double price = 125.50;
+char grade = 'A';
+boolean active = true;
+
+A variable stores a value of a particular type. The final keyword can be used when a value should not be reassigned.
+
+final int MAX = 100;
+
+Java provides arithmetic operators such as +, -, *, /, and %. Relational operators compare values, while logical operators combine boolean expressions.
+
+int a = 10;
+int b = 5;
+
+int sum = a + b;
+int difference = a - b;
+int product = a * b;
+int remainder = a % b;
+
+CONTROL FLOW
+
+Java provides conditional statements for decision making.
+
+int marks = 75;
+
+if (marks >= 50) {
+    System.out.println("Pass");
+} else {
+    System.out.println("Fail");
+}
+
+Multiple conditions can be represented using else-if.
+
+if (marks >= 90) {
+    System.out.println("A");
+} else if (marks >= 75) {
+    System.out.println("B");
+} else {
+    System.out.println("C");
+}
+
+The switch statement is useful when a value must be compared with several possible cases.
+
+int option = 2;
+
+switch (option) {
+    case 1:
+        System.out.println("Add");
+        break;
+    case 2:
+        System.out.println("Delete");
+        break;
+    default:
+        System.out.println("Invalid option");
+}
+
+Loops allow statements to execute repeatedly. Java provides for, while, and do-while loops.
+
+for (int i = 0; i < 5; i++) {
+    System.out.println(i);
+}
+
+int count = 5;
+
+while (count > 0) {
+    System.out.println(count);
+    count--;
+}
+
+The do-while loop executes its body at least once.
+
+int value = 1;
+
+do {
+    System.out.println(value);
+    value++;
+} while (value <= 5);
+
+ARRAYS
+
+An array stores multiple elements of the same type. Its size is fixed when it is created.
+
+int[] numbers = new int[5];
+
+numbers[0] = 10;
+numbers[1] = 20;
+numbers[2] = 30;
+numbers[3] = 40;
+numbers[4] = 50;
+
+An array can also be initialized directly.
+
+int[] values = {10, 20, 30, 40, 50};
+
+Array indexes begin at zero. The length field provides the number of elements.
+
+System.out.println(values[0]);
+System.out.println(values.length);
+
+An enhanced for loop can process every element.
+
+for (int value : values) {
+    System.out.println(value);
+}
+
+CLASSES AND OBJECTS
+
+Object-oriented programming organizes software using classes and objects. A class describes the properties and behavior of objects.
+
+class Student {
+    String name;
+    int marks;
+
+    void display() {
+        System.out.println(name);
+        System.out.println(marks);
+    }
+}
+
+An object is created using the new operator.
+
+Student student = new Student();
+
+student.name = "Ravi";
+student.marks = 85;
+
+student.display();
+
+A class can contain fields and methods. Fields represent state, while methods represent behavior.
+
+CONSTRUCTORS
+
+A constructor initializes an object when it is created. It has the same name as the class and does not have a return type.
+
+class Student {
+    String name;
+    int marks;
+
+    Student(String name, int marks) {
+        this.name = name;
+        this.marks = marks;
+    }
+}
+
+Objects can then be created with initial values.
+
+Student s1 = new Student("Ravi", 85);
+Student s2 = new Student("Anu", 92);
+
+The this keyword refers to the current object.
+
+ENCAPSULATION
+
+Encapsulation combines data and operations inside a class while controlling access to the internal state. A common approach is to declare fields private and provide public methods.
+
+class Account {
+    private double balance;
+
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance = balance + amount;
+        }
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+}
+
+The private field cannot normally be accessed directly from outside the class. Public methods provide controlled access.
+
+Java provides access modifiers including private, protected, public, and package-level access. Access control helps implement information hiding and reduces unwanted dependencies between classes.
+
+STATIC MEMBERS
+
+The static keyword associates a member with the class rather than with individual objects.
+
+class Counter {
+    static int count = 0;
+
+    Counter() {
+        count++;
+    }
+}
+
+The count field is shared by all objects of Counter.
+
+Counter first = new Counter();
+Counter second = new Counter();
+
+System.out.println(Counter.count);
+
+Static methods can be called using the class name.
+
+class Utility {
+    static int square(int x) {
+        return x * x;
+    }
+}
+
+int result = Utility.square(5);
+
+INHERITANCE
+
+Inheritance allows one class to acquire accessible behavior from another class.
+
+class Animal {
+    void eat() {
+        System.out.println("Eating");
+    }
+}
+
+class Dog extends Animal {
+    void bark() {
+        System.out.println("Barking");
+    }
+}
+
+A Dog object can use the inherited eat method as well as its own bark method.
+
+Dog dog = new Dog();
+
+dog.eat();
+dog.bark();
+
+The existing class is called the superclass and the derived class is called the subclass.
+
+METHOD OVERRIDING
+
+A subclass can provide its own implementation of an inherited method.
+
+class Animal {
+    void sound() {
+        System.out.println("Animal sound");
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    void sound() {
+        System.out.println("Dog sound");
+    }
+}
+
+Overriding allows subclasses to specialize inherited behavior.
+
+POLYMORPHISM
+
+Polymorphism allows a general reference to refer to an object of a more specific class.
+
+Animal animal = new Dog();
+
+animal.sound();
+
+Although the reference is of type Animal, the actual object is a Dog. The overridden method associated with the actual object can therefore be selected.
+
+ABSTRACTION
+
+Abstraction focuses on essential behavior while hiding unnecessary implementation details. Java supports abstraction using abstract classes and interfaces.
+
+An abstract class can contain abstract methods.
+
+abstract class Shape {
+    abstract void draw();
+
+    void message() {
+        System.out.println("Shape");
+    }
+}
+
+A concrete subclass provides the implementation.
+
+class Circle extends Shape {
+    @Override
+    void draw() {
+        System.out.println("Drawing circle");
+    }
+}
+
+INTERFACES
+
+An interface defines a contract that implementing classes must follow.
+
+interface Printable {
+    void print();
+}
+
+class Report implements Printable {
+    public void print() {
+        System.out.println("Printing report");
+    }
+}
+
+An interface reference can refer to an implementing object.
+
+Printable document = new Report();
+document.print();
+
+Interfaces are useful for abstraction and for defining common behavior across different classes.
+
+A class can implement more than one interface.
+
+interface Readable {
+    void read();
+}
+
+interface Writable {
+    void write();
+}
+
+class FileHandler implements Readable, Writable {
+
+    public void read() {
+        System.out.println("Reading");
+    }
+
+    public void write() {
+        System.out.println("Writing");
+    }
+}
+
+PACKAGES
+
+Packages organize related classes and interfaces. They also provide a namespace that helps avoid naming conflicts.
+
+A package declaration can be written as:
+
+package university;
+
+A class from another package can be imported.
+
+import university.Student;
+
+Packages are useful for organizing large Java applications into logical components.
+
+EXCEPTION HANDLING
+
+An exception represents an abnormal condition that can interrupt normal program execution.
+
+For example:
+
+try {
+    int result = 10 / 0;
+    System.out.println(result);
+} catch (ArithmeticException e) {
+    System.out.println("Division by zero");
+}
+
+The try block contains code that may produce an exception. The catch block handles the exception.
+
+Multiple catch blocks can handle different exception types.
+
+try {
+    String text = null;
+    System.out.println(text.length());
+} catch (NullPointerException e) {
+    System.out.println("Null reference");
+} catch (Exception e) {
+    System.out.println("Other exception");
+}
+
+The finally block can contain cleanup operations.
+
+try {
+    System.out.println("Processing");
+} finally {
+    System.out.println("Cleanup");
+}
+
+The throw statement can explicitly generate an exception.
+
+throw new IllegalArgumentException("Invalid value");
+
+A method can use throws to indicate that an exception may be passed to its caller.
+
+void readData() throws Exception {
+    // operation
+}
+
+Exception handling allows abnormal conditions to be separated from normal application logic.
+
+MULTITHREADING
+
+A thread represents an independent path of execution. Java supports multithreaded programming.
+
+One approach is to extend the Thread class.
+
+class Worker extends Thread {
+    public void run() {
+        System.out.println("Worker running");
+    }
+}
+
+Worker worker = new Worker();
+worker.start();
+
+Another approach is to implement Runnable.
+
+class Task implements Runnable {
+    public void run() {
+        System.out.println("Task running");
+    }
+}
+
+Thread thread = new Thread(new Task());
+thread.start();
+
+Calling start begins a new thread of execution. The run method contains the work performed by the thread.
+
+When multiple threads access shared data, synchronization may be required.
+
+class Counter {
+    private int value = 0;
+
+    synchronized void increment() {
+        value++;
+    }
+
+    int getValue() {
+        return value;
+    }
+}
+
+Synchronization helps prevent conflicting concurrent modifications.
+
+INPUT AND OUTPUT
+
+Java provides classes for input and output operations. Standard output can be accessed through System.out.
+
+System.out.println("Hello");
+System.out.print("Java");
+
+The Scanner class can be used for reading input.
+
+import java.util.Scanner;
+
+Scanner scanner = new Scanner(System.in);
+
+int number = scanner.nextInt();
+
+System.out.println(number);
+
+Java also provides stream classes for file and other I/O operations. Byte streams handle raw byte data, while character streams are designed for character data.
+
+STRINGS
+
+The String class represents a sequence of characters.
+
+String language = "Java";
+
+System.out.println(language.length());
+System.out.println(language.charAt(0));
+
+Strings can be concatenated.
+
+String first = "Object";
+String second = "Oriented";
+
+String result = first + " " + second;
+
+String objects are immutable. Operations that appear to modify a String produce another String when necessary.
+
+String text = "Java Programming";
+
+String upper = text.toUpperCase();
+String part = text.substring(0, 4);
+
+Strings can be compared using equals.
+
+String a = "Java";
+String b = "Java";
+
+if (a.equals(b)) {
+    System.out.println("Equal");
+}
+
+COLLECTIONS
+
+Java provides collection classes for storing groups of objects.
+
+A List represents an ordered collection.
+
+import java.util.ArrayList;
+
+ArrayList<String> names = new ArrayList<>();
+
+names.add("Ravi");
+names.add("Anu");
+names.add("Kiran");
+
+System.out.println(names.get(0));
+
+A List can contain duplicate values.
+
+names.add("Ravi");
+
+A Set represents a collection that does not normally contain duplicate elements.
+
+import java.util.HashSet;
+
+HashSet<String> subjects = new HashSet<>();
+
+subjects.add("Java");
+subjects.add("Networks");
+subjects.add("Java");
+
+A Map stores associations between keys and values.
+
+import java.util.HashMap;
+
+HashMap<String, Integer> marks = new HashMap<>();
+
+marks.put("Java", 90);
+marks.put("Networks", 85);
+marks.put("Database", 88);
+
+int javaMark = marks.get("Java");
+
+A map is useful when a value must be retrieved using an identifying key.
+
+GENERICS
+
+Generics allow classes and collections to operate on specified types.
+
+ArrayList<Integer> numbers = new ArrayList<>();
+
+numbers.add(10);
+numbers.add(20);
+
+Integer value = numbers.get(0);
+
+The Integer type parameter specifies what type of objects the list should contain.
+
+A generic class can also be created.
+
+class Box<T> {
+
+    private T value;
+
+    void set(T value) {
+        this.value = value;
+    }
+
+    T get() {
+        return value;
+    }
+}
+
+Box<String> box = new Box<>();
+
+box.set("Java");
+
+String text = box.get();
+
+Generics improve type safety and reduce unnecessary type conversions.
+
+NETWORKING
+
+Java provides networking classes that allow applications to communicate across networks.
+
+A socket represents an endpoint of communication. A client can create a socket to connect to a server.
+
+Socket socket = new Socket("localhost", 5000);
+
+A server can listen for connections using ServerSocket.
+
+ServerSocket server = new ServerSocket(5000);
+
+Socket client = server.accept();
+
+After establishing a connection, input and output streams can be used to exchange information.
+
+Network programs need to handle connection failures, invalid addresses, interrupted operations, and resource cleanup.
+
+DATABASE CONNECTIVITY
+
+Java applications can communicate with relational databases using database connectivity APIs.
+
+A typical database operation involves obtaining a connection, preparing a statement, executing a query, processing results, and closing resources.
+
+A parameterized query can be represented as:
+
+SELECT name FROM students WHERE id = ?
+
+A prepared statement can then receive the value of the id parameter.
+
+Database applications commonly perform operations such as INSERT, SELECT, UPDATE, and DELETE.
+
+GUI PROGRAMMING
+
+Java provides graphical user interface facilities through technologies such as AWT and Swing.
+
+GUI applications can contain components such as windows, buttons, labels, text fields, lists, and panels.
+
+User actions can generate events. Event handling allows a program to respond to actions such as button clicks or keyboard input.
+
+AWT provides basic graphical components and event mechanisms. Swing provides additional components and a richer GUI framework.
+
+APPLET AND SERVLET CONCEPTS
+
+Java has historically included technologies for web and network-oriented applications. Applets were designed to execute Java code within supporting client environments. Servlets are server-side components used to process client requests and produce responses.
+
+Although modern Java web development commonly uses newer frameworks and deployment approaches, these technologies are important for understanding the historical development of Java applications.
+
+OBJECT-ORIENTED DESIGN
+
+A good object-oriented design divides a system into classes with clear responsibilities.
+
+Encapsulation protects internal state.
+
+Inheritance can represent specialization relationships.
+
+Polymorphism allows different implementations to be used through a common type.
+
+Abstraction hides unnecessary implementation details.
+
+Interfaces define contracts between components.
+
+Packages organize related classes.
+
+For example, a simple library system can contain a Book class.
+
+class Book {
+
+    private int id;
+    private String title;
+
+    Book(int id, String title) {
+        this.id = id;
+        this.title = title;
+    }
+
+    int getId() {
+        return id;
+    }
+
+    String getTitle() {
+        return title;
+    }
+}
+
+Books can be stored in a map using their identifier as the key.
+
+HashMap<Integer, Book> books = new HashMap<>();
+
+Book book = new Book(101, "Java Programming");
+
+books.put(book.getId(), book);
+
+Book selected = books.get(101);
+
+This demonstrates how a hash map provides a key-based relationship between an identifier and an object.
+
+SOFTWARE DESIGN PRINCIPLES
+
+Large Java applications should avoid unnecessary coupling between classes. A class should expose only the operations that other components need.
+
+Private fields and public methods can protect object state. Interfaces can allow components to communicate without depending on specific implementations.
+
+Composition can also be used instead of inheritance.
+
+class Engine {
+
+    void start() {
+        System.out.println("Engine started");
+    }
+}
+
+class Car {
+
+    private Engine engine = new Engine();
+
+    void startCar() {
+        engine.start();
+        System.out.println("Car started");
+    }
+}
+
+Here the Car contains an Engine. The relationship is based on composition.
+
+RESOURCE MANAGEMENT
+
+Files, sockets, and database connections are external resources and should be closed after use.
+
+Java provides try-with-resources for resources that implement AutoCloseable.
+
+try (Scanner scanner = new Scanner(System.in)) {
+    int value = scanner.nextInt();
+    System.out.println(value);
+}
+
+The resource is automatically closed when execution leaves the try block.
+
+JAVA APPLICATION STRUCTURE
+
+A Java application can contain multiple classes organized into packages.
+
+For example, a university application might contain:
+
+Student
+Course
+Teacher
+Department
+Enrollment
+
+Each class can represent a separate responsibility. A manager class can coordinate operations, while data structures such as lists and maps can store collections of objects.
+
+A HashMap can be useful when objects must be retrieved using unique identifiers.
+
+HashMap<Integer, Student> students = new HashMap<>();
+
+students.put(1, new Student("Ravi", 85));
+students.put(2, new Student("Anu", 92));
+
+Student student = students.get(1);
+
+The key provides a direct way to locate the associated value.
+
+SUMMARY
+
+Java provides a complete environment for developing object-oriented applications.
+
+Important Java programming concepts include variables, primitive data types, operators, conditional statements, loops, arrays, classes, objects, constructors, methods, encapsulation, inheritance, abstraction, polymorphism, interfaces, packages, exceptions, threads, strings, collections, generics, networking, database connectivity, and graphical user interfaces.
+
+A class defines the structure and behavior of objects. Encapsulation protects internal data. Inheritance allows specialization. Polymorphism allows common references to work with different implementations. Abstraction hides unnecessary details, while interfaces define contracts.
+
+Collections provide reusable structures such as lists, sets, and maps. A map associates keys with values and allows values to be retrieved using their keys.
+
+Exception handling provides a structured approach to abnormal conditions. Threads allow concurrent execution, while synchronization can protect shared state.
+
+Java I/O supports communication with external resources. Networking APIs allow communication between systems, and database connectivity allows applications to work with persistent information.
+
+Together, these concepts form the foundation for developing Java applications and understanding more advanced Java programming and software engineering techniques.

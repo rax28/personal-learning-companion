@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS conversations (id UUID PRIMARY KEY, user_id UUID, goal_id UUID, created_at TIMESTAMPTZ DEFAULT now()); CREATE TABLE IF NOT EXISTS messages (id UUID PRIMARY KEY, conversation_id UUID, role TEXT NOT NULL, content TEXT NOT NULL, created_at TIMESTAMPTZ DEFAULT now());
