@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import os
+
 import httpx
 
 from app import db
@@ -9,42 +10,67 @@ from app import db
 
 class MemoryManager:
     def __init__(self):
-        self.ollama_url = os.getenv(
-            "OLLAMA_BASE_URL",
-            "http://127.0.0.1:11434",
-        ).rstrip("/")
+        self.cloudflare_account_id = os.getenv(
+            "CLOUDFLARE_ACCOUNT_ID", ""
+        ).strip()
+        self.cloudflare_api_token = os.getenv(
+            "CLOUDFLARE_API_TOKEN", ""
+        ).strip()
         self.embedding_model = os.getenv(
             "EMBEDDING_MODEL",
-            "bge-m3:latest",
+            "@cf/baai/bge-base-en-v1.5",
         )
-        self.embedding_dimensions = 1024
+        self.embedding_dimensions = 768
 
     async def embed(self, text: str) -> list[float]:
-        """Convert text into a BGE-M3 embedding."""
+        """Generate embeddings using Cloudflare Workers AI."""
+        if not self.cloudflare_account_id or not self.cloudflare_api_token:
+            raise RuntimeError(
+                "CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN "
+                "must be configured in Railway."
+            )
+
+        url = (
+            "https://api.cloudflare.com/client/v4/accounts/"
+            f"{self.cloudflare_account_id}/ai/run/"
+            f"{self.embedding_model}"
+        )
+
         async with httpx.AsyncClient(timeout=60) as client:
             response = await client.post(
-                f"{self.ollama_url}/api/embed",
-                json={
-                    "model": self.embedding_model,
-                    "input": text,
+                url,
+                headers={
+                    "Authorization": f"Bearer {self.cloudflare_api_token}",
+                    "Content-Type": "application/json",
                 },
+                json={"text": [text]},
             )
             response.raise_for_status()
             data = response.json()
 
-        embeddings = data.get("embeddings", [])
-        if not embeddings:
-            raise RuntimeError("Ollama returned no embedding")
+        if not data.get("success", False):
+            raise RuntimeError(
+                f"Cloudflare embedding request failed: "
+                f"{data.get('errors', 'Unknown error')}"
+            )
 
-        vector = embeddings[0]
+        result = data.get("result") or {}
+        vectors = result.get("data") or result.get("embeddings") or []
+
+        if not vectors:
+            raise RuntimeError(
+                "Cloudflare returned no embedding vectors."
+            )
+
+        vector = vectors[0]
 
         if len(vector) != self.embedding_dimensions:
             raise ValueError(
-                f"Expected {self.embedding_dimensions} dimensions, "
-                f"received {len(vector)}"
+                f"Expected {self.embedding_dimensions} dimensions from "
+                f"{self.embedding_model}, received {len(vector)}."
             )
 
-        return vector
+        return [float(value) for value in vector]
 
     @staticmethod
     def _vector_literal(vector: list[float]) -> str:
@@ -84,7 +110,6 @@ class MemoryManager:
         """Retrieve semantically similar memories for the current user."""
         uid = db.user_id()
 
-        # Avoid calling the embedding model if this user has no memories.
         result = db.fetchone(
             """
             SELECT EXISTS (
