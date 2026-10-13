@@ -1,93 +1,115 @@
 # Personal Learning Companion
 
-A production-oriented MVP scaffold based on the supplied master project instructions. The implementation keeps the AI intelligence in FastAPI, application/business logic in Express, and UI/offline concerns in React. The MVP is intentionally provider-independent and works without API keys through a deterministic demo model.
+An AI-powered personalized learning platform that adapts its teaching to a learner’s knowledge, learning progress, and knowledge gaps.
 
-## MVP implemented
-- Goal creation and listing
-- Natural chat flow
-- Evidence extraction into structured learner state
-- Mastery/confidence tracking
-- Gap and misconception detection
-- Prerequisite-aware root-gap ranking
-- Adaptive teaching strategy selection
-- Persistent PostgreSQL schema with pgvector support
-- Redis-ready configuration
-- Online/local model interfaces with mock fallback and Ollama adapter
-- Offline browser cache/event queue foundation
-- Sync endpoint foundation with revision-aware merge
-- Automated Python intelligence tests and TypeScript backend tests
+Personal Learning Companion combines source-grounded AI tutoring, lossless compression, intelligent retrieval, and a dynamic learner model to provide a more personalized and context-aware learning experience.
 
-## Quick start
+## Key Features
 
-### 1. Requirements
-- Node.js 20+
-- npm 10+
-- Python 3.11+
-- Docker (optional, for PostgreSQL/Redis)
+- **Source-Based Learning:** Ingest learning materials and use relevant source content to ground AI-generated explanations.
+- **Lossless Source Compression:** Store source chunks in a compressed cache and retrieve only the relevant content when needed.
+- **AI-Powered Tutoring:** Use Llama 3.2 through Ollama to generate context-aware explanations grounded in retrieved evidence.
+- **Personalized Learner Model:** Track learner evidence, concept mastery, and knowledge gaps.
+- **Adaptive Teaching:** Use learner progress and identified gaps to guide subsequent learning interactions.
+- **Knowledge Graph:** Represent concepts and their relationships to support structured learning.
+- **Persistent Learner State:** Maintain learner information separately from the source knowledge cache.
+- **Full-Stack Architecture:** Integrate the frontend, backend API, AI service, and supporting data services.
 
-### 2. Install
-```bash
-npm install
-cd ai-backend && python -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt && cd ..
+## System Architecture
+
+```text
+Learning Sources
+      |
+      v
+Source Ingestion
+      |
+      v
+Chunking and Lossless Compression
+      |
+      v
+Compressed Source Cache
+      |
+      v
+Relevant Chunk Retrieval
+      |
+      v
+Llama 3.2 / Ollama
+      |
+      v
+Grounded AI Tutoring
+      |
+      v
+Learner Evidence
+      |
+      v
+Mastery and Knowledge Gaps
+      |
+      v
+Knowledge Graph and Learner State
 ```
 
-### 3. Start infrastructure
+## Technology Stack
+
+- **Frontend:** Web-based user interface
+- **Backend:** API gateway and application services
+- **AI Service:** Python, FastAPI
+- **Language Model:** Llama 3.2 via Ollama
+- **Data and Infrastructure:** PostgreSQL, Redis, Docker
+- **Source Processing:** Chunking, lossless compression, and retrieval
+
+*Note: Verify the exact technologies and service responsibilities against the current project configuration before publishing.*
+
+## How It Works
+
+1. Add learning materials through the Source Lab.
+2. Process the materials into chunks and store them in a compressed cache.
+3. Retrieve and decompress relevant chunks for a learning query.
+4. Provide the retrieved evidence to the language model as context.
+5. Generate an answer grounded in the available learning materials.
+6. Use learning interactions to update learner evidence, mastery, and knowledge gaps.
+7. Represent the learner’s evolving understanding through the knowledge graph and persistent state.
+
+## Getting Started
+
+### Prerequisites
+
+- Git
+- Docker and Docker Compose
+- Python 3, if running Python services locally
+- Ollama with the required Llama model, if running the AI service locally
+
+### Clone the Repository
+
 ```bash
-npm run db:up
+git clone https://github.com/rax28/personal-learning-companion.git
+cd personal-learning-companion
 ```
 
-### 4. Configure
-Copy `.env.example` to `.env`. The default mock model requires no API keys.
+### Start the Application
 
-### 5. Run
-```bash
-npm run dev
-```
-Frontend: http://localhost:5173
-Express: http://localhost:4000
-AI backend: http://localhost:8000/docs
+If the repository contains a configured `compose.yaml` or `docker-compose.yml`, start the services with:
 
-### 6. Test
 ```bash
-npm test
-npm run build
+docker compose up --build
 ```
 
-## Ollama offline model
-Install Ollama separately and pull a Qwen model, e.g. `qwen2.5:3b`. Set `LOCAL_MODEL=qwen2.5:3b`. The browser offline layer stores learner state and queues sync events; a future desktop/mobile shell can connect the local model directly.
+Check the repository's environment configuration and setup instructions before starting the application. Required environment variables, model availability, database initialization, and service ports may need to be configured first.
 
-## Architecture
-See `docs/architecture/*` and `docs/ai/*`.
+## Project Goals
 
-## Natural conversation + external models
+- Deliver personalized, evidence-based AI tutoring.
+- Reduce repeated source processing through a compressed source cache.
+- Connect retrieval directly to AI-generated explanations.
+- Track learning progress using evidence, mastery, and knowledge gaps.
+- Build a learner model that evolves through learning interactions.
 
-The companion now keeps recent conversation history, persists conversations and learner state in `.data/companion.json`, and sends the relevant history + learner state to the AI backend. The AI backend can use OpenAI's Responses API (with optional web search), Gemini, or Ollama/Qwen. Provider choice is configuration-driven; API keys remain server-side.
+## Current Development Focus
 
-Set `ONLINE_PROVIDER=openai` and `OPENAI_API_KEY` for an online GPT-powered experience. Set `ONLINE_PROVIDER=gemini` with `GEMINI_API_KEY` for Gemini. For local/offline development use `ONLINE_PROVIDER=ollama` and run Ollama with the configured Qwen model.
+- Verifying the complete source-to-tutor pipeline.
+- Testing learner-model updates after real learning sessions.
+- Validating persistence of mastery, knowledge gaps, and concept relationships.
+- Testing the integrated Docker deployment and AI service.
 
-The OpenAI integration uses the Responses API and can attach the built-in web search tool when `OPENAI_WEB_SEARCH=true`. OpenAI documents Responses API text generation and built-in web search in its developer quickstart. Gemini's current SDK/API supports `models.generate_content` and chat history/system instructions.
+## License
 
-## v6 learning map
-
-The companion now has three separate conversation areas — Education, Self Understanding, and Interview Prep — while sharing one durable learner knowledge graph. The graph is SQLite-backed at `ai-backend/data/knowledge.db` by default and is separate from conversation history. Messages are evidence attached to concepts; individual chat messages are never graph nodes.
-
-The teaching loop is stateful: explain → check understanding → one small practice question → wait → evaluate → adapt. Two Pointers and beginner Integration have deterministic starter practice scaffolding so a small local model such as `llama3.2` does not have to invent the entire learning state.
-
-The frontend includes the persistent pixel-cat companion, three-area floating navigation, and a dedicated Progress Map/tree view. The supplied pixel-cat sprite sheet is used as the base for idle/listening/jump/sleep states.
-
-## V8 Source Lab + compressed offline cache
-
-Source Lab now has a complete MVP retrieval path. A source is chunked and each chunk is stored as a zlib-compressed UTF-8 payload. The frontend automatically caches the source after compression and sends its `sourceId` with chat requests. The AI backend retrieves only matching chunks, decompresses them, and places them in the Llama prompt as source evidence. See `docs/offline-source-cache.md`.
-
-The compression archive remains deterministic and byte-exact. Llama is used for local chat and optional predictability scoring; the current Ollama API integration does not claim to provide the full token-distribution arithmetic codec required to reproduce a neural compressor exactly.
-
-Regression test:
-```bash
-PYTHONPATH=ai-backend:. python scripts/test-50-scenarios.py
-```
-Expected: `PASSED 50/50`.
-
-
-## V9 user-specific deployment
-
-The active persistence path is now PostgreSQL, scoped by the authenticated Google user UUID. Redis is a cache/read accelerator, not the source of truth. The learner knowledge graph, mastery, evidence, conversation state, profiles, conversations, messages and source cache are isolated per user. Google login uses OpenID Connect and an HttpOnly JWT session; Google Classroom uses a separate user-scoped OAuth grant. See `docs/user-specific-deployment.md` for the deployment contract and `.env.example` for required environment variables.
+No license has been specified yet. Add a license before distributing the project for reuse.
