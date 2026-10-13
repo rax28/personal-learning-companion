@@ -488,8 +488,10 @@ const classroomScopes = [
 const classroomRedirect = () =>
   process.env.GOOGLE_CLASSROOM_REDIRECT_URI ||
   "http://localhost:4000/oauth/google/classroom/callback";
-const cookieSecure = () =>
-  process.env.COOKIE_SECURE === "true" ? "; Secure" : "";
+const classroomStateCookieAttributes = () =>
+  process.env.COOKIE_SECURE === "true"
+    ? "SameSite=None; Secure"
+    : "SameSite=Lax";
 const googleConfigured = () =>
   Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
 
@@ -564,7 +566,7 @@ app.get("/integrations/google/classroom/start", (req: AuthRequest, res) => {
 
   res.setHeader(
     "Set-Cookie",
-    `plc_classroom_state=${state}; HttpOnly; SameSite=Lax; Path=/; Max-Age=600${cookieSecure()}`,
+    `plc_classroom_state=${state}; HttpOnly; ${classroomStateCookieAttributes()}; Path=/; Max-Age=600`,
   );
 
   const client = new OAuth2Client(
@@ -614,7 +616,7 @@ app.get("/oauth/google/classroom/callback", async (req, res) => {
     );
     res.setHeader(
       "Set-Cookie",
-      `plc_classroom_state=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0${cookieSecure()}`,
+      `plc_classroom_state=; HttpOnly; ${classroomStateCookieAttributes()}; Path=/; Max-Age=0`,
     );
     res.redirect(
       (process.env.FRONTEND_URL || "http://localhost:5173") +
