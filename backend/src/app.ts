@@ -41,7 +41,14 @@ app.post("/auth/register", register);
 app.post("/auth/login", login);
 app.post("/auth/logout", logout);
 app.get("/auth/me", me);
-app.use(requireAuth);
+
+app.use((req, res, next) => {
+  if (req.path === "/oauth/google/classroom/callback") {
+    return next();
+  }
+
+  return requireAuth(req as AuthRequest, res, next);
+});
 
 app.post("/goals", async (req: AuthRequest, res) => {
   const p = z
