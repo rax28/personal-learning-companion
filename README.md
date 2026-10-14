@@ -1,6 +1,4 @@
-# Personal Learning Companion
-personal-learning-companion-two.vercel.app
-
+# [Personal Learning Companion](https://personal-learning-companion-two.vercel.app)
 An AI-powered personalized learning platform that adapts its teaching to a learner’s knowledge, learning progress, and knowledge gaps.
 
 Personal Learning Companion combines source-grounded AI tutoring, lossless source compression, intelligent retrieval, and a dynamic learner model to provide a personalized and context-aware learning experience.
