@@ -2,14 +2,12 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-
 const API = import.meta.env.VITE_API_URL || "http://localhost:4000";
 const apiFetch = (input: any, init: any = {}) =>
   fetch(input, { ...init, credentials: "include" });
 type Mode = "education" | "self" | "interview";
 type View = "chat" | "map" | "source";
 type Msg = { role: "user" | "assistant"; content: string };
-
 const modes = [
   {
     id: "education",
@@ -32,7 +30,6 @@ const starter = {
   self: "What have you noticed about how you learn?",
   interview: "What do you want to practise?",
 };
-
 function Cat({ active }: { active: boolean }) {
   const [i, setI] = useState(0);
   const frames = active
@@ -74,7 +71,6 @@ function inferTopic(text: string) {
   ];
   return pairs.find(([k]) => low.includes(k))?.[1];
 }
-
 function Login() {
   const [view, setView] = useState<"login" | "register">("login");
   const [name, setName] = useState("");
@@ -191,7 +187,6 @@ function Login() {
     </div>
   );
 }
-
 function App() {
   const [auth, setAuth] = useState<any>(null);
   const [authLoading, setAuthLoading] = useState(true);
@@ -212,7 +207,6 @@ function App() {
     );
   return auth?.authenticated ? <AuthenticatedApp /> : <Login />;
 }
-
 function AuthenticatedApp() {
   const [mode, setMode] = useState<Mode>("education");
   const [view, setView] = useState<View>("chat");
@@ -264,7 +258,6 @@ function AuthenticatedApp() {
     courseId: "",
   });
   const current = modes.find((x) => x.id === mode)!;
-
   useEffect(() => {
     try {
       const x = JSON.parse(
@@ -558,7 +551,6 @@ function AuthenticatedApp() {
   const active = (graph.conversationStates || []).find(
     (x: any) => x.mode === mode && x.status === "active",
   );
-
   return (
     <div className="app">
       <header className="topbar">
@@ -937,22 +929,18 @@ function AuthenticatedApp() {
                       `${API}/integrations/google/classroom/start`,
                       { credentials: "include" },
                     );
-
                     const data = await response.json();
-
                     if (!response.ok) {
                       throw new Error(
                         data.error ||
                           "Could not start Google Classroom connection",
                       );
                     }
-
                     if (!data.url) {
                       throw new Error(
                         "Google authorization URL was not returned",
                       );
                     }
-
                     window.location.href = data.url;
                   } catch (error) {
                     alert(
